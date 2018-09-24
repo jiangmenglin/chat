@@ -2,7 +2,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <string>
+#include <string.h>
 #include <stdlib.h>
 #include <netdb.h>
 #include <unistd.h>
@@ -56,7 +56,7 @@ int main(int argc, char * argv[])
             strcat(buf, ":");
             memset(buf_read, 0, 100);
             fgets(buf_read, 100, stdin);
-            strcat(buf, buf_read, strlen(buf_read) - 1);
+            strcat(buf, buf_read);
             if ((sendbytes = send(clientfd, buf, strlen(buf), 0)) == -1)
             {
                 perror("fail to send");

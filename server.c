@@ -12,7 +12,7 @@
 #include <sys/shm.h>
 #include <time.h>
 
-#define PERM S_IRUER | S_IWUER //用户读写
+#define PERM S_IRUSR | S_IWUSR //用户读写
 #define MYPORT 3490   //定义通信端口号
 #define BACKLOG 10  //定义服务器可以链接的最大客户端数量
 #define WELCOME "|-------------------WELCOME TO THE CHAT ROOM!-----------------------|"  //党课胡连接上时显示的欢迎语句
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
         }
 
         //得到客户端的ip地址输出
-        cahr address[20];
+        char address[20];
         inet_ntop(AF_INET, &their_addr.sin_addr, address, sizeof(address));
 
         printf("accept from %s\n", address);
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
                     write_addr = shmat(shmid, 0, 0);
                     memset(write_addr, '\0', 1024);
 
-                    strcpy(write_addr, '\0', 1024);
+                    strncpy(write_addr, buf, 1024);
                     get_cur_time(time_str);
                     strcat(buf, time_str);
                     printf("%s\n", buf);
@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
                         if (send(clientfd, read_addr, strlen(read_addr), 0) == -1)
                         {
                             perror("fail to send.");
-                            exit(1)
+                            exit(1);
                         }
                         memset(read_addr, '\0', 1024);
                         strcpy(read_addr, temp);
@@ -165,9 +165,9 @@ int main(int argc, char *argv[])
             }
         }
     }
-    printf("----------------------------\n")
-        free(buf);
-        close(sockfd);
-        close(clientfd);
-        return 0;
+    printf("----------------------------\n");
+    free(buf);
+    close(sockfd);
+    close(clientfd);
+    return 0;
 }
